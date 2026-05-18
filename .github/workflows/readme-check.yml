@@ -1,0 +1,40 @@
+name: 'PR Title & README Ticket Check'
+
+on:
+  pull_request:
+    types: [opened, edited, synchronize, reopened]
+
+jobs:
+  check-ticket:
+    name: 'Verify Ticket in README'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository code
+        uses: actions/checkout@v4
+
+      - name: Extract Ticket from PR Title and Verify in README
+        run: |
+          # 1. Get the PR title from the GitHub context
+          PR_TITLE="${{ github.event.pull_request.title }}"
+          echo "PR Title: $PR_TITLE"
+
+          # 2. Extract the ticket inside the parentheses or brackets (e.g., ENG-44190)
+          TICKET=$(echo "$PR_TITLE" | grep -oE '[A-Z]+-[0-9]+' | head -n 1)
+
+          if [ -z "$TICKET" ]; then
+            echo "❌ Error: Could not find a valid ticket number (e.g., ENG-44190) inside the PR title."
+            echo "Please ensure your PR title follows the format: fix(ENG-XXXXX): your description"
+            exit 1
+          fi
+
+          echo "Found Ticket Number in PR Title: $TICKET"
+
+          # 3. Check if this exact ticket text exists anywhere inside the README.md file
+          if grep -q "$TICKET" README.md; then
+            echo "✅ Success: Ticket $TICKET is properly documented in README.md!"
+            exit 0
+          else
+            echo "❌ Error: Ticket $TICKET was found in your PR title, but it is missing from README.md."
+            echo "Please update your README.md release logs to include this ticket number before merging."
+            exit 1
+          fi

@@ -1,4 +1,4 @@
-name: 'PR Title & README Ticket Check'
+name: 'PR README Check'
 
 on:
   pull_request:

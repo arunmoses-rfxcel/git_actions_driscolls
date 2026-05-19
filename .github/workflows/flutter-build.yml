@@ -64,12 +64,16 @@ jobs:
       - name: Install dependencies
         run: flutter pub get
 
+      - name: Pre-configure iOS Project
+        run: flutter build ios --config-only
+
       # iOS requires CocoaPods initialization before running the build
       - name: Install CocoaPods Dependencies
         run: |
           cd ios
           pod repo update 
           pod install
+          cd ..
 
       # Note: This builds an unsigned .app file (good for validation checks).
       # To generate a signed .ipa for TestFlight, you must add Apple Certificates/Provisioning Profiles.

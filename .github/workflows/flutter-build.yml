@@ -1,0 +1,88 @@
+name: 'Flutter Build APK & iOS'
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main, develop ]
+  workflow_dispatch: # Allows manual triggering from the Actions tab
+
+jobs:
+  # --------------------------------------------------------
+  # ANDROID BUILD JOB
+  # --------------------------------------------------------
+  build-android:
+    name: 'Build Android APK'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository code
+        uses: actions/checkout@v4
+
+      - name: Set up Java Development Kit (JDK)
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'zulu'
+          java-version: '17' # Required for modern Gradle/Flutter setups
+
+      - name: Set up Flutter SDK
+        uses: subosito/flutter-action@v2
+        with:
+          channel: 'stable'
+          # cache: true # Optional: speeds up builds after the first run
+
+      - name: Install dependencies
+        run: flutter pub get
+
+      # Optional: Uncomment if you use code generation (like build_runner)
+      # - name: Run Code Generation
+      #   run: dart run build_runner build --delete-conflicting-outputs
+
+      - name: Build Android Release APK
+        run: flutter build apk --release
+
+      - name: Upload APK Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: release-apk
+          path: build/app/outputs/flutter-apk/app-release.apk
+
+  # --------------------------------------------------------
+  # iOS BUILD JOB (Requires macOS Runner)
+  # --------------------------------------------------------
+  build-ios:
+    name: 'Build iOS App'
+    runs-on: macos-latest
+    steps:
+      - name: Check out repository code
+        uses: actions/checkout@v4
+
+      - name: Set up Flutter SDK
+        uses: subosito/flutter-action@v2
+        with:
+          channel: 'stable'
+
+      - name: Install dependencies
+        run: flutter pub get
+
+      # iOS requires CocoaPods initialization before running the build
+      - name: Install CocoaPods Dependencies
+        run: |
+          cd ios
+          pod repo update 
+          pod install
+
+      # Note: This builds an unsigned .app file (good for validation checks).
+      # To generate a signed .ipa for TestFlight, you must add Apple Certificates/Provisioning Profiles.
+      - name: Build iOS (No Sign)
+        run: flutter build ios --release --no-codesign
+
+      - name: Compress iOS Build Output
+        run: |
+          cd build/ios/iphoneos
+          zip -r Runner.app.zip Runner.app
+
+      - name: Upload iOS Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: release-ios
+          path: build/ios/iphoneos/Runner.app.zip

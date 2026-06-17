@@ -64,18 +64,18 @@ jobs:
       - name: Clean Flutter
         run: flutter clean
 
-      - name: Clean Android Gradle
-        run: |
-          cd android
-          gradlew clean
-          cd ..
-
       - name: Check If gradlew Exists
         run: |
           echo "=== Looking for gradlew ==="
           find . -name "gradlew" -type f
           echo "=== Contents of android/ ==="
           ls -la android/
+
+      - name: Clean Android Gradle
+        run: |
+          cd android
+          gradlew clean
+          cd ..
 
       - name: Get Dependencies
         run: flutter pub get

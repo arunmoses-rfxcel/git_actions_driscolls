@@ -37,6 +37,12 @@ jobs:
       # - name: Run Code Generation
       #   run: dart run build_runner build --delete-conflicting-outputs
 
+      - name: Clean project
+        run: flutter clean
+
+      - name: Install dependencies
+        run: flutter pub get
+
       - name: Build Android Release APK
         run: flutter build apk --release
 

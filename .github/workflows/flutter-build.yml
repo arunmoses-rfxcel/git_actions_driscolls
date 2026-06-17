@@ -37,6 +37,20 @@ jobs:
       # - name: Run Code Generation
       #   run: dart run build_runner build --delete-conflicting-outputs
 
+      - name: Print Versions (Debug)
+        run: |
+          echo "=== Flutter Version ==="
+          flutter --version
+            
+          echo "=== Kotlin Version ==="
+          grep "kotlin_version" android/build.gradle
+            
+          echo "=== AGP Version ==="
+          grep "com.android.tools.build:gradle" android/build.gradle
+            
+          echo "=== Gradle Version ==="
+          grep "distributionUrl" android/gradle/wrapper/gradle-wrapper.properties
+
       - name: Clean everything
         run: |
           flutter clean

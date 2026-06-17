@@ -88,7 +88,13 @@ jobs:
         run: |
           echo "=== Flutter Version ==="
           flutter --version
-            
+          
+          echo "=== Java Version ==="
+          java -version
+
+          echo "=== Gradle Version ==="
+          ./android/gradlew -v
+    
           echo "=== Kotlin Version ==="
           grep "kotlin_version" android/build.gradle
             
@@ -113,48 +119,3 @@ jobs:
         with:
           name: release-apk
           path: build/app/outputs/flutter-apk/app-release.apk
-
-  # --------------------------------------------------------
-  # iOS BUILD JOB (Requires macOS Runner)
-  # --------------------------------------------------------
-  build-ios:
-    name: 'Build iOS App'
-    runs-on: macos-latest
-    steps:
-      - name: Check out repository code
-        uses: actions/checkout@v4
-
-      - name: Set up Flutter SDK
-        uses: subosito/flutter-action@v2
-        with:
-          channel: 'stable'
-
-      - name: Install dependencies
-        run: flutter pub get
-
-      - name: Pre-configure iOS Project
-        run: flutter build ios --config-only
-
-      # iOS requires CocoaPods initialization before running the build
-      - name: Install CocoaPods Dependencies
-        run: |
-          cd ios
-          pod repo update 
-          pod install
-          cd ..
-
-      # Note: This builds an unsigned .app file (good for validation checks).
-      # To generate a signed .ipa for TestFlight, you must add Apple Certificates/Provisioning Profiles.
-      - name: Build iOS (No Sign)
-        run: flutter build ios --release --no-codesign
-
-      - name: Compress iOS Build Output
-        run: |
-          cd build/ios/iphoneos
-          zip -r Runner.app.zip Runner.app
-
-      - name: Upload iOS Artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: release-ios
-          path: build/ios/iphoneos/Runner.app.zip

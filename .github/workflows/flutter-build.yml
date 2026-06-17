@@ -38,7 +38,9 @@ jobs:
       #   run: dart run build_runner build --delete-conflicting-outputs
 
       - name: Clean project
-        run: flutter clean
+        run: |
+          flutter clean
+          rm -rf ~/.gradle/caches
 
       - name: Install dependencies
         run: flutter pub get

@@ -60,22 +60,12 @@ jobs:
       - name: Install dependencies
         run: flutter pub get
 
-      - name: Build APK with Full Debugging
+      - name: Build APK with Verbose Output
         run: |
-          echo "=== Starting Build with Debug Flags ==="
-
-          # Clean first
           flutter clean
-
-          # Build with Gradle debug flags
-          cd android
-          ./gradlew assembleRelease \
-            --stacktrace \
-            --info \
-            --debug \
-            --scan
-
-          cd ..
+          flutter pub get
+          flutter build apk --release --verbose
+        shell: /usr/bin/bash -e {0}
 
       - name: Build Android Release APK
         run: flutter build apk --release

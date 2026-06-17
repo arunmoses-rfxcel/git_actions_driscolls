@@ -46,25 +46,25 @@ jobs:
           # Verify files are updated
       - name: Verify Kotlin Version (Check Files)
         run: |
-                    echo "=== android/build.gradle ==="
-                    cat android/build.gradle
+          echo "=== android/build.gradle ==="
+          cat android/build.gradle
                     
-                    echo "=== android/gradle.properties ==="
-                    cat android/gradle.properties
+          echo "=== android/gradle.properties ==="
+          cat android/gradle.properties
                     
-                    echo "=== android/app/build.gradle ==="
-                    cat android/app/build.gradle
-                shell: bash
+          echo "=== android/app/build.gradle ==="
+          cat android/app/build.gradle
+        shell: bash
 
-                  - name: Clean Flutter (Force Full Clean)
-                    run: |
-                      flutter clean --force
-                      cd android
-                      ./gradlew clean
-                      cd ..
+      - name: Clean Flutter (Force Full Clean)
+        run: |
+          flutter clean --force
+          cd android
+          ./gradlew clean
+          cd ..
 
-                  - name: Get Dependencies
-                    run: flutter pub get
+      - name: Get Dependencies
+        run: flutter pub get
 
       # Optional: Uncomment if you use code generation (like build_runner)
       # - name: Run Code Generation

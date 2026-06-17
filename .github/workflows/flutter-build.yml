@@ -45,7 +45,8 @@ jobs:
       - name: Setup Java
         uses: actions/setup-java@v4
         with:
-          java-version: 12.x
+          java-version: '17'
+          distribution: 'temurin'
 
           # Verify files are updated
       - name: Verify Kotlin Version (Check Files)

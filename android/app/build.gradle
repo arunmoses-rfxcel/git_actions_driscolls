@@ -24,14 +24,15 @@ if (flutterVersionName == null) {
 
 android {
     namespace "com.example.git_actions_driscolls"
-    compileSdkVersion flutter.compileSdkVersion
+    compileSdkVersion 34
     ndkVersion flutter.ndkVersion
 
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
         kotlinOptions {
-            languageVersion = "1.9"  // or "1.8", change from "1.4"
+            // REMOVE or UPDATE this line if it exists:
+            languageVersion = "1.9"  // Should be "1.9", NOT "1.4"
         }
     }
 
@@ -48,8 +49,8 @@ android {
         applicationId "com.example.git_actions_driscolls"
         // You can update the following values to match your application needs.
         // For more information, see: https://docs.flutter.dev/deployment/android#reviewing-the-gradle-build-configuration.
-        minSdkVersion flutter.minSdkVersion
-        targetSdkVersion flutter.targetSdkVersion
+        minSdkVersion 21
+        targetSdkVersion 34
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
     }

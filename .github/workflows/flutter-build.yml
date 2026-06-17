@@ -30,6 +30,11 @@ jobs:
         run: |
           rm -rf ~/.flutterools
           rm -rf .dart_tool
+          rm -rf build
+          rm -rf .dart_tool
+          rm -rf .flutter-plugins
+          rm -rf .flutter-plugins-dependencies
+          rm -rf .packages
 
       - name: Setup Flutter
         uses: subosito/flutter-action@v2
@@ -56,9 +61,11 @@ jobs:
           cat android/app/build.gradle
         shell: bash
 
-      - name: Clean Flutter (Force Full Clean)
+      - name: Clean Flutter
+        run: flutter clean
+
+      - name: Clean Android Gradle
         run: |
-          flutter clean --force
           cd android
           ./gradlew clean
           cd ..

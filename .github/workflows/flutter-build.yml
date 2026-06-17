@@ -71,11 +71,11 @@ jobs:
           echo "=== Contents of android/ ==="
           ls -la android/
 
-      - name: Clean Android Gradle
+      - name: Clean everything
         run: |
-          cd android
-          gradlew clean
-          cd ..
+          flutter clean
+          rm -rf ~/.gradle
+          rm -rf ~/.pub-cache
 
       - name: Get Dependencies
         run: flutter pub get

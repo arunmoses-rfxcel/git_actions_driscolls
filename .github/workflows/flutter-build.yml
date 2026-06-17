@@ -39,14 +39,13 @@ jobs:
       - name: Setup Flutter
         uses: subosito/flutter-action@v2
         with:
-          flutter-version: '3.44.2'
+          flutter-version: '3.24.5'
           cache: false  # ← Disable caching
 
       - name: Setup Java
         uses: actions/setup-java@v4
         with:
-          java-version: '17'
-          distribution: 'temurin'
+          java-version: 12.x
 
           # Verify files are updated
       - name: Verify Kotlin Version (Check Files)
@@ -91,9 +90,6 @@ jobs:
           
           echo "=== Java Version ==="
           java -version
-
-          echo "=== Gradle Version ==="
-          ./android/gradlew -v
     
           echo "=== Kotlin Version ==="
           grep "kotlin_version" android/build.gradle

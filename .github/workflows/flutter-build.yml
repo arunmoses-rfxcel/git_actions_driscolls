@@ -36,18 +36,6 @@ jobs:
           rm -rf .flutter-plugins-dependencies
           rm -rf .packages
 
-      - name: Setup Flutter
-        uses: subosito/flutter-action@v2
-        with:
-          flutter-version: '3.24.5'
-          cache: false  # ← Disable caching
-
-      - name: Setup Java
-        uses: actions/setup-java@v4
-        with:
-          java-version: '17'
-          distribution: 'temurin'
-
           # Verify files are updated
       - name: Verify Kotlin Version (Check Files)
         run: |

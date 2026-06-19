@@ -2,9 +2,21 @@ name: 'Flutter Build APK & iOS'
 
 on:
   push:
-    branches: [ main, develop ]
+    branches:
+      - main
+      - master
+      - develop
+      - release/*
+      - hotfix/*
+      - patch/*
   pull_request:
-    branches: [ main, develop ]
+    branches:
+      - main
+      - master
+      - develop
+      - release/*
+      - hotfix/*
+      - patch/*
   workflow_dispatch: # Allows manual triggering from the Actions tab
 
 jobs:
@@ -36,25 +48,17 @@ jobs:
           rm -rf .flutter-plugins-dependencies
           rm -rf .packages
 
-          # Verify files are updated
-      - name: Verify Kotlin Version (Check Files)
-        run: |
-          echo "=== android/build.gradle ==="
-          cat android/build.gradle
-                    
-          echo "=== android/gradle.properties ==="
-          cat android/gradle.properties
-                    
-          echo "=== android/app/build.gradle ==="
-          cat android/app/build.gradle
-        shell: bash
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.16.9'
+          cache: false  # ← Disable caching
 
-      - name: Check If gradlew Exists
-        run: |
-          echo "=== Looking for gradlew ==="
-          find . -name "gradlew" -type f
-          echo "=== Contents of android/ ==="
-          ls -la android/
+      - name: Setup Java
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'temurin'
 
       - name: Clean everything
         run: |
@@ -64,27 +68,6 @@ jobs:
 
       - name: Get Dependencies
         run: flutter pub get
-
-      # Optional: Uncomment if you use code generation (like build_runner)
-      # - name: Run Code Generation
-      #   run: dart run build_runner build --delete-conflicting-outputs
-
-      - name: Print Versions (Debug)
-        run: |
-          echo "=== Flutter Version ==="
-          flutter --version
-          
-          echo "=== Java Version ==="
-          java -version
-    
-          echo "=== Kotlin Version ==="
-          grep "kotlin_version" android/build.gradle
-            
-          echo "=== AGP Version ==="
-          grep "com.android.tools.build:gradle" android/build.gradle
-            
-          echo "=== Gradle Version ==="
-          grep "distributionUrl" android/gradle/wrapper/gradle-wrapper.properties
 
       - name: Build APK with Verbose Output
         run: |

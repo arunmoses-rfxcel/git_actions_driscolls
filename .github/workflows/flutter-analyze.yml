@@ -1,5 +1,24 @@
 name: 'Flutter Analyse'
 
+on:
+  push:
+    branches:
+      - main
+      - master
+      - develop
+      - release/*
+      - hotfix/*
+      - patch/*
+  pull_request:
+    branches:
+      - main
+      - master
+      - develop
+      - release/*
+      - hotfix/*
+      - patch/*
+  workflow_dispatch: # Allows manual triggering from the Actions tab
+
 jobs:
   analyze:
     name: Flutter Analyze (Lint Check)

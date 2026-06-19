@@ -76,6 +76,8 @@ jobs:
           flutter build apk --release --verbose
         shell: /usr/bin/bash -e {0}
 
+      - run: flutter test
+
       - name: Build Android Release APK
         run: flutter build apk --release
 
@@ -84,3 +86,5 @@ jobs:
         with:
           name: release-apk
           path: build/app/outputs/flutter-apk/app-release.apk
+
+      - run: flutter build appbundle

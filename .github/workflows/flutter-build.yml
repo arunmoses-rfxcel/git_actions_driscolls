@@ -82,7 +82,7 @@ jobs:
         run: dart pub global activate dart_code_metrics
 
       - name: Run Metrics
-        run: dart run dart_code_metrics:metrics analyze lib
+        run: dart pub global run dart_code_metrics:metrics analyze lib
 
       - name: Analyze Code
         run: flutter analyze --fatal-warnings

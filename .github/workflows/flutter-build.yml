@@ -49,9 +49,6 @@ jobs:
           cat android/app/build.gradle
         shell: bash
 
-      - name: Clean Flutter
-        run: flutter clean
-
       - name: Check If gradlew Exists
         run: |
           echo "=== Looking for gradlew ==="
